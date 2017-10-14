@@ -1,4 +1,5 @@
 #include "Gluttony.h"
+#include "Board.h"
 #include "SimpleAudioEngine.h"
 
 USING_NS_CC;
@@ -26,9 +27,12 @@ bool Gluttony::init()
 
     return true;
 }
+static auto puntos = 0;
+static auto speed = 1;
 
 void Gluttony::loadGame()
 {
+	
     speed = 1.0f;
     this->schedule(schedule_selector(Gluttony::update), speed);
     
@@ -36,8 +40,9 @@ void Gluttony::loadGame()
     auto screenSize = Director::getInstance()->getVisibleSize();
     playerPosition = screenSize / (charactersSize * 4);
     drawCharacter(PLAYER, playerPosition);
-    
+	
     createPoint();
+	createEnemy();
 }
 
 void Gluttony::configKeyboard()
@@ -70,12 +75,41 @@ void Gluttony::configKeyboard()
 
 void Gluttony::update(float deltaTime)
 {
+	Size screenSize = Director::getInstance()->getVisibleSize();
     movePlayer();
-    
+
+	if (playerPosition.x==pointPosition.x && playerPosition.y == pointPosition.y) {
+		auto labelPoints = Label::create();
+		removeChild(labelPoints);
+		labelPoints->setPosition(Vec2(screenSize / 3.f * 2.f));
+		puntos++;
+		std::string str = std::to_string(puntos);
+		labelPoints->setString(str);
+		labelPoints->setWidth(20);
+		labelPoints->setSystemFontSize(24);
+		addChild(labelPoints);
+		createPoint();
+		createEnemy();
+		speed -= 0.1;
+		this->unschedule(schedule_selector(Gluttony::update));
+		this->schedule(schedule_selector(Gluttony::update), speed);
+
+	}
+	if (playerPosition.x == enemyPosition.x && playerPosition.y == enemyPosition.y) {
+		auto scene = Board::create();
+		Director::getInstance()->replaceScene(scene);
+	}
+
+	if (playerPosition.x > 24|| playerPosition.x <0 || playerPosition.y < 0 || playerPosition.y > 17) {
+		auto scene = Board::create();
+		Director::getInstance()->replaceScene(scene);
+	}
+
     drawNode->clear();
     
     drawCharacter(PLAYER, playerPosition);
     drawCharacter(POINT, pointPosition);
+	drawCharacter(ENEMY, enemyPosition);
 }
 
 void Gluttony::drawCharacter(CharacterType type, Vec2 gridPosition)
@@ -117,3 +151,10 @@ void Gluttony::createPoint() {
     pointPosition = Vec2(cocos2d::random() % (int) borders.x, cocos2d::random() % (int) borders.y);
     drawCharacter(POINT, pointPosition);
 }
+
+void Gluttony::createEnemy() {
+	enemyPosition = Vec2(cocos2d::random() % (int)borders.x, cocos2d::random() % (int)borders.y);
+	drawCharacter(ENEMY, enemyPosition);
+}
+
+

@@ -36,8 +36,11 @@ public:
     
     // Point
     cocos2d::Vec2 pointPosition;
+	cocos2d::Vec2 enemyPosition;
     
     void createPoint();
+
+	void createEnemy();
     
     // implement the "static create()" method manually
     CREATE_FUNC(Gluttony);

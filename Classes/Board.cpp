@@ -99,9 +99,9 @@ void Board::stopDiceAndMove()
     Size screenSize = Director::getInstance()->getVisibleSize();
     
     Vec2 finalPosition = Vec2(screenSize.width / 7 * actualNumber + firstTileSize.width / 2, playerSprite->getPosition().y);
-    
-    auto jumps = JumpTo::create(actualNumber * 0.6, finalPosition, 60, actualNumber);
-    
+	actualNumber = 2;
+	auto jumps = JumpTo::create(actualNumber * 0.6, finalPosition, 60, actualNumber);
+	
     playerSprite->runAction(jumps);
     
     schedule([=](float dt){
@@ -114,19 +114,61 @@ void Board::startDice()
     Size screenSize = Director::getInstance()->getVisibleSize();
     auto diceLabel = Label::create();
     
-    diceLabel->setPosition(Vec2(screenSize/3.f * 2.f));
+   /* diceLabel->setPosition(Vec2(screenSize/3.f * 2.f));
     diceLabel->setSystemFontSize(40);
-    
-    addChild(diceLabel);
-    
-    schedule([=](float dt){
 
+
+    addChild(diceLabel);
+*/
+    schedule([=](float dt){
         actualNumber %= sceneConstructors.size();
         actualNumber++;
-        
+		auto dado=Sprite::create("dice1.png");
+		if (actualNumber == 1) 
+		{
+			removeChild(dado);
+			auto dado = Sprite::create("dice1.png");			
+			 dado->setPosition(Vec2(screenSize / 3.f * 2.f));
+			 addChild(dado);
+		}else if (actualNumber == 2)
+		{
+			removeChild(dado);
+			auto dado = Sprite::create("dice2.png");
+			 dado->setPosition(Vec2(screenSize / 3.f * 2.f));
+			 addChild(dado);
+		}
+		else if (actualNumber == 3)
+		{
+			removeChild(dado);
+			auto dado = Sprite::create("dice3.png");
+			dado->setPosition(Vec2(screenSize / 3.f * 2.f));
+			addChild(dado);
+		}
+		else if (actualNumber == 4)
+		{
+			removeChild(dado);
+			auto dado = Sprite::create("dice4.png");
+			 dado->setPosition(Vec2(screenSize / 3.f * 2.f));
+			 addChild(dado);
+		}
+		else if (actualNumber == 5)
+		{
+			removeChild(dado);
+			auto dado = Sprite::create("dice5.png");
+			 dado->setPosition(Vec2(screenSize / 3.f * 2.f));
+			 addChild(dado);
+		}
+		else if (actualNumber == 6)
+		{
+			removeChild(dado);
+			auto  dado = Sprite::create("dice6.png");
+			 dado->setPosition(Vec2(screenSize / 3.f * 2.f));
+			 addChild(dado);
+		}
+		
         string text = "";
         text.push_back(actualNumber+'0');
-        diceLabel->setString(text);
+        //diceLabel->setString(text);
         
     }, 0.1f, -1, 0, "changeDiceNumber");
     

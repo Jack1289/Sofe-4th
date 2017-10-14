@@ -54,19 +54,29 @@ void Stacking::runInitialAnimation()
     
 }
 
+
+
 void Stacking::initClickListener()
 {
     auto mouseListener = EventListenerTouchOneByOne::create();
+	auto KeyBoardListener = EventListenerKeyboard::create();
     
     mouseListener->onTouchBegan = [=](Touch* touch, Event* event){
         context->stopAndFall();
         return true;
     };
+
+	mouseListener->onTouchBegan = [=](Touch* touch, Event* event) {
+		context->stopAndFall();
+		return true;
+	};
+	
     mouseListener->onTouchMoved = [=](Touch* touch, Event* event){};
     
     mouseListener->onTouchEnded = [=](Touch* touch, Event* event){};
     
     _eventDispatcher->addEventListenerWithSceneGraphPriority(mouseListener, this);
+
 }
 
 void Stacking::stopAndFall()
